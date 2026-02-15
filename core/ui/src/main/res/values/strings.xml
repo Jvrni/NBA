@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TeamGamesBottomSheet -->
+    <string name="team_games_bottom_sheet_back">Home</string>
+    <string name="team_games_bottom_sheet_title_home_name">Home\nName</string>
+    <string name="team_games_bottom_sheet_title_home_score">Home\nScore</string>
+    <string name="team_games_bottom_sheet_title_visitor_name">Visitor\nName</string>
+    <string name="team_games_bottom_sheet_title_visitor_score">Visitor\nScore</string>
+    <string name="team_games_bottom_sheet_loading_message">...</string>
+    <string name="team_games_bottom_sheet_empty_state_message">No games found</string>
+
+
+    <!-- ErrorState -->
+    <string name="error_state_button">"Retry"</string>
+</resources>
