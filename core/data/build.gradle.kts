@@ -30,6 +30,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    testOptions {
+        unitTests {
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 dependencies {
@@ -38,10 +43,12 @@ dependencies {
 
     implementation(libs.bundles.coroutines)
 
+    implementation(libs.retrofit)
+
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
 }

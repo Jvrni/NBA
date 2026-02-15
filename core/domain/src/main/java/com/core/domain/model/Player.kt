@@ -5,9 +5,8 @@ data class Player(
     val firstName: String,
     val lastName: String,
     val position: String,
-    val heightFeet: Int?,
-    val heightInches: Int?,
-    val weightPounds: Int?,
+    val height: Int?,
+    val weight: Int?,
     val team: Team
 ) {
     val fullName: String
