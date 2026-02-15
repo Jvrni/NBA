@@ -11,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.core.domain.model.Game
 import com.core.domain.model.Team
 import com.core.ui.theme.NbaAppTheme
+import com.core.ui.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +74,7 @@ fun TeamGamesBottomSheet(
                         tint = MaterialTheme.colorScheme.onTertiary
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text("Home", color = MaterialTheme.colorScheme.onTertiary)
+                    Text(stringResource(R.string.team_games_bottom_sheet_back), color = MaterialTheme.colorScheme.onTertiary)
                 }
 
                 Text(
@@ -93,7 +95,7 @@ fun TeamGamesBottomSheet(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "Home\nName",
+                    text = stringResource(R.string.team_games_bottom_sheet_title_home_name),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(2f),
@@ -101,7 +103,7 @@ fun TeamGamesBottomSheet(
                 )
 
                 Text(
-                    text = "Home\nScore",
+                    text = stringResource(R.string.team_games_bottom_sheet_title_home_score),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f),
@@ -109,7 +111,7 @@ fun TeamGamesBottomSheet(
                 )
 
                 Text(
-                    text = "Visitor\nName",
+                    text = stringResource(R.string.team_games_bottom_sheet_title_visitor_name),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(2f),
@@ -117,7 +119,7 @@ fun TeamGamesBottomSheet(
                 )
 
                 Text(
-                    text = "Visitor\nScore",
+                    text = stringResource(R.string.team_games_bottom_sheet_title_visitor_score),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f),
@@ -130,7 +132,7 @@ fun TeamGamesBottomSheet(
             Spacer(modifier = Modifier.height(8.dp))
 
             if (games.isEmpty() && !isLoading) {
-                EmptyState(message = "No games found")
+                EmptyState(message = stringResource(R.string.team_games_bottom_sheet_empty_state_message))
             } else {
                 LazyColumn(
                     state = listState,
@@ -161,7 +163,7 @@ fun TeamGamesBottomSheet(
                     if (hasMorePages && !isLoading) {
                         item {
                             Text(
-                                text = "...",
+                                text = stringResource(R.string.team_games_bottom_sheet_loading_message),
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(8.dp),
