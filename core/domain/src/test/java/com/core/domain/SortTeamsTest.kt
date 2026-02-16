@@ -1,5 +1,6 @@
 package com.core.domain
 
+import com.core.domain.model.SortType
 import com.core.domain.model.Team
 import com.core.domain.usecase.SortTeams
 import junit.framework.TestCase.assertEquals
@@ -25,7 +26,7 @@ class SortTeamsTest {
     @Test
     fun `sort by name returns alphabetically sorted teams`() {
         // When
-        val result = useCase(mockTeams, SortTeams.SortType.NAME)
+        val result = useCase(mockTeams, SortType.NAME)
         
         // Then
         assertEquals("Atlanta Hawks", result[0].fullName)
@@ -36,7 +37,7 @@ class SortTeamsTest {
     @Test
     fun `sort by city returns city sorted teams`() {
         // When
-        val result = useCase(mockTeams, SortTeams.SortType.CITY)
+        val result = useCase(mockTeams, SortType.CITY)
         
         // Then
         assertEquals("Atlanta", result[0].city)
@@ -47,7 +48,7 @@ class SortTeamsTest {
     @Test
     fun `sort by conference returns conference sorted teams`() {
         // When
-        val result = useCase(mockTeams, SortTeams.SortType.CONFERENCE)
+        val result = useCase(mockTeams, SortType.CONFERENCE)
         
         // Then
         assertEquals("East", result[0].conference)

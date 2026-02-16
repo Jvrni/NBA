@@ -15,5 +15,7 @@ data class Player(
 
 data class PlayerPage(
     val players: List<Player>,
-    val hasNextPage: Boolean
-)
+    override val hasNextPage: Boolean
+) : PageData<Player> {
+    override val items: List<Player> get() = players
+}
