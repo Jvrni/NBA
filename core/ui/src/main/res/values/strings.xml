@@ -12,4 +12,8 @@
 
     <!-- ErrorState -->
     <string name="error_state_button">"Retry"</string>
+
+    <!-- Sort Dialog -->
+    <string name="sort_dialog_sort_by">Sort by</string>
+    <string name="sort_dialog_cancel">Cancel</string>
 </resources>

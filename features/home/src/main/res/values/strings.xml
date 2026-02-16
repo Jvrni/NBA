@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home_top_app_bar_title">Home</string>
+    <string name="home_label_name">Name</string>
+    <string name="home_label_city">City</string>
+    <string name="home_label_conference">Conference</string>
+</resources>

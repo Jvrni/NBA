@@ -15,7 +15,5 @@ data class Player(
 
 data class PlayerPage(
     val players: List<Player>,
-    val currentPage: Int,
-    val totalPages: Int,
     val hasNextPage: Boolean
 )
