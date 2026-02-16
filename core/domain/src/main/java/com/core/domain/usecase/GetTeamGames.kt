@@ -1,14 +1,15 @@
 package com.core.domain.usecase
 
-import com.core.domain.model.GamePage
+import androidx.paging.PagingData
+import com.core.domain.model.Game
 import com.core.domain.repository.GameRepository
-import com.core.domain.result.AppResult
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetTeamGames @Inject constructor(
     private val gameRepository: GameRepository
 ) {
-    suspend operator fun invoke(teamId: Int, page: Int = 1): AppResult<GamePage> {
+    operator fun invoke(teamId: Int, page: Int = 1): Flow<PagingData<Game>> {
         return gameRepository.getTeamGames(teamId, page)
     }
 }

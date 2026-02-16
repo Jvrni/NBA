@@ -5,6 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.core.ui.viewmodel.TeamGamesViewModel
 
 @Composable
@@ -14,20 +15,15 @@ fun TeamGamesBottomSheetContainer(
     onDismiss: () -> Unit,
     viewModel: TeamGamesViewModel = hiltViewModel()
 ) {
-    val games by viewModel.games.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val hasMorePages by viewModel.hasMorePages.collectAsState()
-    
+    val games = viewModel.gamesPagingData.collectAsLazyPagingItems()
+
     LaunchedEffect(teamId) {
         viewModel.loadGames(teamId)
     }
-    
+
     TeamGamesBottomSheet(
         teamName = teamName,
         games = games,
-        isLoading = isLoading,
-        hasMorePages = hasMorePages,
-        onLoadMore = { viewModel.loadMoreGames() },
         onDismiss = onDismiss
     )
 }

@@ -27,10 +27,10 @@ data class PlayerDto(
     val position: String,
 
     @field:Json(name = "height")
-    val height: Int?,
+    val height: String?,
 
     @field:Json(name = "weight")
-    val weight: Int?,
+    val weight: String?,
 
     @field:Json(name = "team")
     val team: TeamDto

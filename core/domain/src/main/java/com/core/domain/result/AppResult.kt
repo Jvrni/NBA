@@ -20,10 +20,10 @@ inline fun <T> AppResult<T>.onError(action: (error: AppResult.Error) -> Unit): A
     return this
 }
 
-inline fun <T, R> AppResult<T>.map(transform: (T) -> R): AppResult<R> {
+inline fun <T, R> AppResult<T>.map(transform: (T) -> R): R {
     return when (this) {
-        is AppResult.Success -> AppResult.Success(transform(data))
-        is AppResult.Error -> this
+        is AppResult.Success -> transform(data)
+        is AppResult.Error -> throw this.throwable ?: Exception(this.message)
     }
 }
 

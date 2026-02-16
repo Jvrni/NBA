@@ -1,18 +1,15 @@
 package com.core.domain.usecase
 
-import com.core.domain.model.PlayerPage
+import androidx.paging.PagingData
+import com.core.domain.model.Player
 import com.core.domain.repository.PlayerRepository
-import com.core.domain.result.AppResult
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SearchPlayers @Inject constructor(
     private val playerRepository: PlayerRepository
 ) {
-    suspend operator fun invoke(query: String, page: Int = 1): AppResult<PlayerPage> {
-        if (query.isBlank()) {
-            return AppResult.Error("Search query cannot be empty")
-        }
-        
-        return playerRepository.searchPlayers(query.trim(), page)
+    suspend operator fun invoke(query: String): Flow<PagingData<Player>> {
+        return playerRepository.searchPlayers(query)
     }
 }

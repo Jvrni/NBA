@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="players_top_app_bar_title">Players</string>
+    <string name="players_search_placeholder">Search players by name…</string>
+    <string name="players_search_icon_description">Search</string>
+    <string name="players_label_name">Name</string>
+    <string name="players_label_position">Position</string>
+    <string name="players_label_team">Team</string>
+    <string name="players_empty_result">No players found\nTry searching with a different name</string>
+    <string name="players_icon_view_games">View games</string>
+    <string name="players_height_weight_format">%dcm / %dkg</string>
+</resources>

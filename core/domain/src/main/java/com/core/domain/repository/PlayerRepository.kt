@@ -1,8 +1,9 @@
 package com.core.domain.repository
 
-import com.core.domain.model.PlayerPage
-import com.core.domain.result.AppResult
+import androidx.paging.PagingData
+import com.core.domain.model.Player
+import kotlinx.coroutines.flow.Flow
 
 interface PlayerRepository {
-    suspend fun searchPlayers(query: String, page: Int): AppResult<PlayerPage>
+    fun searchPlayers(query: String): Flow<PagingData<Player>>
 }

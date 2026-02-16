@@ -53,7 +53,10 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.bundles.coroutines)
+    implementation(libs.androidx.paging.compose)
 
+    testImplementation(libs.pagingCommon)
+    testImplementation(libs.pagingTesting)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)

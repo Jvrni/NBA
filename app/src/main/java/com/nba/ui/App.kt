@@ -1,5 +1,6 @@
 package com.nba.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
@@ -20,21 +21,31 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.serialization.generateHashCode
 import com.core.domain.model.SelectedTeam
 import com.core.ui.components.TeamGamesBottomSheetContainer
 import com.core.ui.model.Menu
 import com.core.ui.navigation.Home
+import com.core.ui.navigation.Players
 import com.features.home.graph.homeGraph
+import com.features.players.graph.playersGraph
 import kotlin.collections.forEach
 
+@SuppressLint("RestrictedApi")
 @Composable
 fun App() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
+    val currentRoute = navBackStackEntry?.destination?.id
 
     val menu = Menu.entries.toTypedArray()
-    val selected = remember { mutableStateOf(Menu.Home) }
+    val selected = remember(currentRoute) {
+        when (currentRoute) {
+            Home.serializer().generateHashCode() -> Menu.Home
+            Players.serializer().generateHashCode() -> Menu.Players
+            else -> Menu.Home
+        }
+    }
 
 
     val selectedTeam = remember { mutableStateOf<SelectedTeam?>(null) }
@@ -53,7 +64,7 @@ fun App() {
                     ) {
                         menu.forEach { item ->
                             NavigationBarItem(
-                                selected = selected.value == item,
+                                selected = selected == item,
                                 colors = NavigationBarItemDefaults.colors(
                                     indicatorColor = Color.Transparent,
                                     selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -64,13 +75,12 @@ fun App() {
                                     Text(
                                         text = item.title,
                                         style = MaterialTheme.typography.bodyMedium.copy(
-                                            fontWeight = if (selected.value == item) FontWeight.Bold
+                                            fontWeight = if (selected == item) FontWeight.Bold
                                             else FontWeight.Normal
                                         ),
                                     )
                                 },
                                 onClick = {
-                                    selected.value = item
                                     navController.navigate(item.route) {
                                         navController.graph.startDestinationRoute?.let { route ->
                                             popUpTo(route) {
@@ -93,6 +103,10 @@ fun App() {
             modifier = Modifier.padding(bottom = paddingValues.calculateBottomPadding())
         ) {
             homeGraph {
+                selectedTeam.value = it
+            }
+
+            playersGraph {
                 selectedTeam.value = it
             }
         }

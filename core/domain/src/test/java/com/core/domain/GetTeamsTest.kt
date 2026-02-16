@@ -2,6 +2,8 @@ package com.core.domain
 
 import com.core.domain.model.Team
 import com.core.domain.repository.TeamRepository
+import com.core.domain.result.AppResult
+import com.core.domain.result.getOrNull
 import com.core.domain.usecase.GetTeams
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -37,13 +39,13 @@ class GetTeamsTest {
                 name = "Hawks"
             )
         )
-        coEvery { teamRepository.getTeams() } returns Result.success(mockTeams)
-        
+        coEvery { teamRepository.getTeams() } returns AppResult.Success(mockTeams)
+
         // When
         val result = useCase()
-        
+
         // Then
-        assertTrue(result.isSuccess)
+        assertTrue(result is AppResult.Success)
         assertEquals(1, result.getOrNull()?.size)
         coVerify(exactly = 1) { teamRepository.getTeams() }
     }
@@ -51,14 +53,14 @@ class GetTeamsTest {
     @Test
     fun `invoke returns failure on repository error`() = runTest {
         // Given
-        val exception = Exception("Network error")
-        coEvery { teamRepository.getTeams() } returns Result.failure(exception)
-        
+        val errorMessage = "Network error"
+        coEvery { teamRepository.getTeams() } returns AppResult.Error(errorMessage)
+
         // When
         val result = useCase()
-        
+
         // Then
-        assertTrue(result.isFailure)
-        assertEquals("Network error", result.exceptionOrNull()?.message)
+        assertTrue(result is AppResult.Error)
+        assertEquals(errorMessage, (result as AppResult.Error).message)
     }
 }
