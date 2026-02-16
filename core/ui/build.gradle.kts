@@ -53,4 +53,9 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(libs.bundles.coroutines)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.turbine)
 }
