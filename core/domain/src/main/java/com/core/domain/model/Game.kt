@@ -15,7 +15,5 @@ data class Game(
 
 data class GamePage(
     val games: List<Game>,
-    val currentPage: Int,
-    val totalPages: Int,
     val hasNextPage: Boolean
 )

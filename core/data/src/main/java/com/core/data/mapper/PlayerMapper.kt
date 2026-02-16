@@ -20,8 +20,6 @@ fun PlayerDto.toDomain(): Player {
 fun PlayerResponseDto.toDomain(): PlayerPage {
     return PlayerPage(
         players = data.map { it.toDomain() },
-        currentPage = meta.currentPage,
-        totalPages = meta.totalPages,
         hasNextPage = meta.nextPage != null
     )
 }

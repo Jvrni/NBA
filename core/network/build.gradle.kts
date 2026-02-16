@@ -29,7 +29,7 @@ android {
         buildConfigField(
             "String",
             "BASE_URL",
-            "\"${localProperties.getProperty("nba.base.url", "https://www.balldontlie.io/api/")}\""
+            "\"${localProperties.getProperty("nba.base.url", "https://api.balldontlie.io/")}\""
         )
 
         buildConfigField(

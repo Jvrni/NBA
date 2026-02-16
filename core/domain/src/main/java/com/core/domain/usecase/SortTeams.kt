@@ -1,5 +1,6 @@
 package com.core.domain.usecase
 
+import com.core.domain.model.SortType
 import com.core.domain.model.Team
 import javax.inject.Inject
 import kotlin.collections.sortedBy
@@ -12,9 +13,5 @@ class SortTeams @Inject constructor() {
             SortType.CITY -> teams.sortedBy { it.city }
             SortType.CONFERENCE -> teams.sortedBy { it.conference }
         }
-    }
-    
-    enum class SortType {
-        NAME, CITY, CONFERENCE
     }
 }
