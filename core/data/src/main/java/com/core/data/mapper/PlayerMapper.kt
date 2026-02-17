@@ -45,6 +45,6 @@ private fun String.toWeightInKg(): Int? {
 fun PlayerResponseDto.toDomain(): PlayerPage {
     return PlayerPage(
         players = data.map { it.toDomain() },
-        hasNextPage = meta.nextPage != null
+        nextCursor = meta.nextCursor
     )
 }

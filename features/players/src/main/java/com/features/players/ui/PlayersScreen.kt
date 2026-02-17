@@ -1,5 +1,6 @@
 package com.features.players.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -123,88 +124,88 @@ private fun SearchBar(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PlayersList(
     players: LazyPagingItems<Player>,
     onPlayerClick: (Int, String) -> Unit
 ) {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = stringResource(id = R.string.players_label_name),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(2f)
-            )
-            Text(
-                text = stringResource(id = R.string.players_label_position),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1f)
-            )
-            Text(
-                text = stringResource(id = R.string.players_label_team),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.weight(1.5f)
-            )
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        stickyHeader {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.tertiary)
+                    .padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stringResource(id = R.string.players_label_name),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(2f)
+                )
+                Text(
+                    text = stringResource(id = R.string.players_label_position),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1f)
+                )
+                Text(
+                    text = stringResource(id = R.string.players_label_team),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.weight(1.5f)
+                )
+            }
+
+            HorizontalDivider()
         }
 
-        HorizontalDivider(
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+        items(
+            count = players.itemCount,
+            key = players.itemKey { it.id }
+        ) { index ->
+            players[index]?.let { player ->
+                PlayerItem(
+                    player = player,
+                    onClick = { onPlayerClick(player.team.id, player.team.fullName) }
+                )
+            }
+        }
 
-        LazyColumn(
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                count = players.itemCount,
-                key = players.itemKey { it.id }
-            ) { index ->
-                players[index]?.let { player ->
-                    PlayerItem(
-                        player = player,
-                        onClick = { onPlayerClick(player.team.id, player.team.fullName) }
-                    )
+        when (players.loadState.append) {
+            is LoadState.Loading -> {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
                 }
             }
-
-            when (players.loadState.append) {
-                is LoadState.Loading -> {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
+            is LoadState.Error -> {
+                item {
+                    val error = (players.loadState.append as LoadState.Error).error
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        TextButton(onClick = { players.retry() }) {
+                            Text("Error: ${error.message}. Tap to retry")
                         }
                     }
                 }
-                is LoadState.Error -> {
-                    item {
-                        val error = (players.loadState.append as LoadState.Error).error
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            TextButton(onClick = { players.retry() }) {
-                                Text("Error: ${error.message}. Tap to retry")
-                            }
-                        }
-                    }
-                }
-                else -> {}
             }
+            else -> {}
         }
     }
 }

@@ -26,12 +26,12 @@ class PlayerRepositoryImpl @Inject constructor(
                 maxSize = 200
             ),
             pagingSourceFactory = {
-                GenericPagingSource { page ->
+                GenericPagingSource { cursor ->
                     withContext(dispatcherProvider.io) {
                         safeApiCall {
                             val response = apiService.searchPlayers(
                                 playerName = query,
-                                page = page
+                                cursor = cursor
                             )
 
                             response.toDomain()

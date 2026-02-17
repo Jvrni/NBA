@@ -14,16 +14,16 @@ class GenericPagingSourceTest {
 
     private data class TestPageData(
         override val items: List<String>,
-        override val hasNextPage: Boolean
+        override val nextCursor: Int?
     ) : PageData<String>
 
     @Test
     fun `load returns page with data on first page`() = runTest {
         // Given
         val items = listOf("Item1", "Item2", "Item3")
-        val pageData = TestPageData(items, hasNextPage = true)
-        val loadPage: suspend (Int) -> AppResult<TestPageData> = { page ->
-            assertEquals(1, page)
+        val pageData = TestPageData(items, nextCursor = 25)
+        val loadPage: suspend (Int) -> AppResult<TestPageData> = { cursor ->
+            assertEquals(0, cursor)
             AppResult.Success(pageData)
         }
         val pagingSource = GenericPagingSource(loadPage)
@@ -42,16 +42,16 @@ class GenericPagingSourceTest {
         val pageResult = result as PagingSource.LoadResult.Page
         assertEquals(items, pageResult.data)
         assertNull(pageResult.prevKey)
-        assertEquals(2, pageResult.nextKey)
+        assertEquals(25, pageResult.nextKey)
     }
 
     @Test
     fun `load returns page with data on subsequent page`() = runTest {
         // Given
         val items = listOf("Item4", "Item5", "Item6")
-        val pageData = TestPageData(items, hasNextPage = true)
-        val loadPage: suspend (Int) -> AppResult<TestPageData> = { page ->
-            assertEquals(3, page)
+        val pageData = TestPageData(items, nextCursor = 75)
+        val loadPage: suspend (Int) -> AppResult<TestPageData> = { cursor ->
+            assertEquals(50, cursor)
             AppResult.Success(pageData)
         }
         val pagingSource = GenericPagingSource(loadPage)
@@ -59,7 +59,7 @@ class GenericPagingSourceTest {
         // When
         val result = pagingSource.load(
             PagingSource.LoadParams.Refresh(
-                key = 3,
+                key = 50,
                 loadSize = 10,
                 placeholdersEnabled = false
             )
@@ -69,17 +69,17 @@ class GenericPagingSourceTest {
         assertTrue(result is PagingSource.LoadResult.Page)
         val pageResult = result as PagingSource.LoadResult.Page
         assertEquals(items, pageResult.data)
-        assertEquals(2, pageResult.prevKey)
-        assertEquals(4, pageResult.nextKey)
+        assertNull(pageResult.prevKey)
+        assertEquals(75, pageResult.nextKey)
     }
 
     @Test
     fun `load returns page with no next key on last page`() = runTest {
         // Given
         val items = listOf("LastItem1", "LastItem2")
-        val pageData = TestPageData(items, hasNextPage = false)
-        val loadPage: suspend (Int) -> AppResult<TestPageData> = { page ->
-            assertEquals(5, page)
+        val pageData = TestPageData(items, nextCursor = null)
+        val loadPage: suspend (Int) -> AppResult<TestPageData> = { cursor ->
+            assertEquals(100, cursor)
             AppResult.Success(pageData)
         }
         val pagingSource = GenericPagingSource(loadPage)
@@ -87,7 +87,7 @@ class GenericPagingSourceTest {
         // When
         val result = pagingSource.load(
             PagingSource.LoadParams.Refresh(
-                key = 5,
+                key = 100,
                 loadSize = 10,
                 placeholdersEnabled = false
             )
@@ -97,7 +97,7 @@ class GenericPagingSourceTest {
         assertTrue(result is PagingSource.LoadResult.Page)
         val pageResult = result as PagingSource.LoadResult.Page
         assertEquals(items, pageResult.data)
-        assertEquals(4, pageResult.prevKey)
+        assertNull(pageResult.prevKey)
         assertNull(pageResult.nextKey)
     }
 
@@ -105,9 +105,9 @@ class GenericPagingSourceTest {
     fun `load returns page with empty list`() = runTest {
         // Given
         val items = emptyList<String>()
-        val pageData = TestPageData(items, hasNextPage = false)
-        val loadPage: suspend (Int) -> AppResult<TestPageData> = { page ->
-            assertEquals(1, page)
+        val pageData = TestPageData(items, nextCursor = null)
+        val loadPage: suspend (Int) -> AppResult<TestPageData> = { cursor ->
+            assertEquals(0, cursor)
             AppResult.Success(pageData)
         }
         val pagingSource = GenericPagingSource(loadPage)
@@ -181,7 +181,7 @@ class GenericPagingSourceTest {
     fun `getRefreshKey returns null when anchorPosition is null`() = runTest {
         // Given
         val loadPage: suspend (Int) -> AppResult<TestPageData> = {
-            AppResult.Success(TestPageData(emptyList(), false))
+            AppResult.Success(TestPageData(emptyList(), null))
         }
         val pagingSource = GenericPagingSource(loadPage)
 

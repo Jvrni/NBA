@@ -23,6 +23,6 @@ fun GameDto.toDomain(): Game {
 fun GameResponseDto.toDomain(): GamePage {
     return GamePage(
         games = data.map { it.toDomain() },
-        hasNextPage = meta.nextPage != null
+        nextCursor = meta.nextCursor
     )
 }

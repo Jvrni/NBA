@@ -1,5 +1,7 @@
 package com.core.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +21,7 @@ import androidx.paging.compose.itemKey
 import com.core.domain.model.Game
 import com.core.ui.R
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun TeamGamesBottomSheet(
     teamName: String,
@@ -34,135 +36,131 @@ fun TeamGamesBottomSheet(
         contentColor = MaterialTheme.colorScheme.onTertiary,
         tonalElevation = 2.dp
     ) {
-        Column(
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .heightIn(max = 600.dp),
+            contentPadding = PaddingValues(16.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                TextButton(
-                    onClick = onDismiss, contentPadding = PaddingValues(0.dp)
+            stickyHeader {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.tertiary),
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        modifier = Modifier.size(20.dp),
-                        tint = MaterialTheme.colorScheme.onTertiary
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        stringResource(R.string.team_games_bottom_sheet_back),
-                        color = MaterialTheme.colorScheme.onTertiary
-                    )
-                }
-
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = teamName,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = stringResource(R.string.team_games_bottom_sheet_title_home_name),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(2f),
-                    textAlign = TextAlign.Start
-                )
-
-                Text(
-                    text = stringResource(R.string.team_games_bottom_sheet_title_home_score),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center
-                )
-
-                Text(
-                    text = stringResource(R.string.team_games_bottom_sheet_title_visitor_name),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(2f),
-                    textAlign = TextAlign.Start
-                )
-
-                Text(
-                    text = stringResource(R.string.team_games_bottom_sheet_title_visitor_score),
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center
-                )
-            }
-
-            HorizontalDivider()
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 600.dp)
-            ) {
-                if (games.loadState.refresh is LoadState.Loading) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(32.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-                }
-
-                if (games.loadState.refresh is LoadState.NotLoading && games.itemCount == 0) {
-                    item {
-                        EmptyState(
-                            message = stringResource(R.string.team_games_bottom_sheet_empty_state_message)
+                    TextButton(
+                        onClick = onDismiss, contentPadding = PaddingValues(0.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(20.dp),
+                            tint = MaterialTheme.colorScheme.onTertiary
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            stringResource(R.string.team_games_bottom_sheet_back),
+                            color = MaterialTheme.colorScheme.onTertiary
                         )
                     }
+
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = teamName,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
                 }
 
-                items(
-                    count = games.itemCount,
-                    key = games.itemKey { it.id }
-                ) { index ->
-                    val game = games[index]
-                    if (game != null) {
-                        GameRow(game = game)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.tertiary)
+                        .padding(vertical = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(R.string.team_games_bottom_sheet_title_home_name),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(2f),
+                        textAlign = TextAlign.Start
+                    )
+
+                    Text(
+                        text = stringResource(R.string.team_games_bottom_sheet_title_home_score),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+
+                    Text(
+                        text = stringResource(R.string.team_games_bottom_sheet_title_visitor_name),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(2f),
+                        textAlign = TextAlign.Start
+                    )
+
+                    Text(
+                        text = stringResource(R.string.team_games_bottom_sheet_title_visitor_score),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                HorizontalDivider()
+            }
+
+            if (games.loadState.refresh is LoadState.Loading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
                     }
                 }
+            }
 
-                if (games.loadState.append is LoadState.Loading) {
-                    item {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
+            if (games.loadState.refresh is LoadState.NotLoading && games.itemCount == 0) {
+                item {
+                    EmptyState(
+                        message = stringResource(R.string.team_games_bottom_sheet_empty_state_message)
+                    )
+                }
+            }
+
+            items(
+                count = games.itemCount,
+                key = games.itemKey { it.id }
+            ) { index ->
+                val game = games[index]
+                if (game != null) {
+                    GameRow(game = game)
+                }
+            }
+
+            if (games.loadState.append is LoadState.Loading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
                 }
             }

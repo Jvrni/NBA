@@ -48,8 +48,8 @@ data class GameDto(
 @JsonClass(generateAdapter = true)
 data class MetaDto(
 
-    @field:Json(name = "next_page")
-    val nextPage: Int?,
+    @field:Json(name = "next_cursor")
+    val nextCursor: Int?,
 
     @field:Json(name = "per_page")
     val perPage: Int,

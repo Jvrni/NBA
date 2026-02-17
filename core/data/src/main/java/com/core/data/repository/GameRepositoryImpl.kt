@@ -31,10 +31,10 @@ class GameRepositoryImpl @Inject constructor(
                 maxSize = 200
             ),
             pagingSourceFactory = {
-                GenericPagingSource { page ->
+                GenericPagingSource { cursor ->
                     withContext(dispatcherProvider.io) {
                         safeApiCall {
-                            val response = apiService.getGames(teamId = teamId, page = page)
+                            val response = apiService.getGames(teamId = teamId, cursor = cursor)
                             response.toDomain()
                         }
                     }

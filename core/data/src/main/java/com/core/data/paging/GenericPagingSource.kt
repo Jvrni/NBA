@@ -10,15 +10,17 @@ class GenericPagingSource<T : Any, P : PageData<T>>(
 ) : PagingSource<Int, T>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, T> {
-        val currentPage = params.key ?: 1
+        val cursor = params.key ?: 0
 
-        return when (val result = loadPage(currentPage)) {
+        return when (val result = loadPage(cursor)) {
             is AppResult.Success -> {
                 val pageData = result.data
+                val nextKey = pageData.nextCursor
+
                 LoadResult.Page(
                     data = pageData.items,
-                    prevKey = if (currentPage == 1) null else currentPage - 1,
-                    nextKey = if (pageData.hasNextPage) currentPage + 1 else null
+                    prevKey = null,
+                    nextKey = nextKey
                 )
             }
 
